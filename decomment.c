@@ -17,6 +17,7 @@ handleNormalState(int c) {
         else {
             putchar(c);
             handleNormalState(ch);
+            return;
             /*
             putchar(ch);
             if (ch=='\'') {
