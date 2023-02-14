@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING, INBACKSLASH};
+enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING};
 
 enum Statetype
 handleNormalState(int c) {
@@ -24,7 +24,7 @@ handleNormalState(int c) {
                 if (c=='\\') {
                     int ch = getchar();
                     if (ch=='n') {
-                        print("\n");
+                        printf("\n");
                     }
                     else {
                         putchar(c);
