@@ -9,6 +9,10 @@ handleNormalState(int c) {
     enum Statetype state;
     if (c=='/') {
         int ch = getchar();
+        if (ch==EOF) {
+            putchar(c);
+            return NORMAL;
+        }
         if (ch=='*') {
         state = INCOMMENT;
         putchar(' ');
@@ -88,7 +92,10 @@ handleCommentState(int c) {
             state = NORMAL;
             return state;
         }
-        else handleCommentState(ch);
+        else {
+            handleCommentState(ch);
+            return;
+        }
     }
     if (c=='\n') printf("\n");
     state = INCOMMENT;
