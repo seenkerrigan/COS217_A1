@@ -6,10 +6,18 @@ enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING};
 enum Statetype
 handleNormalState(int c) {
     enum Statetype state;
-    if (c=='/' && getchar()=='*') {
+    if (c=='/') {
+        int ch = getchar();
+        if (ch=='*') {
         state = INCOMMENT;
         putchar(' ');
         return state;
+        }
+        else {
+            state = NORMAL;
+            putchar(c);
+            putchar(ch);
+        }
     }
     if (c=='\'') {
         state = INCHAR;
