@@ -25,6 +25,13 @@ handleNormalState(int c) {
         int ch = getchar();
         state = NORMAL;
         if (ch=='n') {
+            int char3 = getchar();
+            if (char3==' ') printf("\n");
+            else {
+                putchar(c);
+                putchar(ch);
+                putchar(char3);
+            }
             printf("\n");
             return state;
         }
@@ -44,8 +51,12 @@ handleCommentState(int c) {
     enum Statetype state;
     if (c=='*' && getchar()=='/') {
         state = NORMAL;
+        return state;
     }
-    else state = INCOMMENT;
+    if (c=='\\' && getchar()=='n') {
+        printf("\n");
+    }
+    state = INCOMMENT;
     return state;
 }
 
@@ -117,6 +128,9 @@ int main(void) {
                 state = handleStringState(c);
                 break;
         }
+    }
+    if (state==INCOMMENT) {
+        return 1;
     }
     return 0;
 }
