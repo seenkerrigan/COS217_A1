@@ -30,14 +30,13 @@ handleNormalState(int c) {
             else {
                 putchar(c);
                 putchar(ch);
-                putchar(char3);
+                handleNormalState(char3);
             }
-            printf("\n");
             return state;
         }
         else {
             putchar(c);
-            putchar(ch);
+            handleNormalState(ch);
             return state;
         }
     }
@@ -53,9 +52,7 @@ handleCommentState(int c) {
         state = NORMAL;
         return state;
     }
-    if (c=='\\' && getchar()=='n') {
-        printf("\n");
-    }
+    if (c=='\n') printf("\n");
     state = INCOMMENT;
     return state;
 }
@@ -130,6 +127,7 @@ int main(void) {
         }
     }
     if (state==INCOMMENT) {
+        stderr("unterminated comment");
         return 1;
     }
     return 0;
