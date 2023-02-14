@@ -9,33 +9,33 @@ handleNormalState(int c) {
     if (c=='/' && getchar()=='*') {
         state = INCOMMENT;
         putchar(' ');
+        return state;
     }
-    else {
-        if (c=='\'') {
-            state = INCHAR;
-            putchar(c);
+    if (c=='\'') {
+        state = INCHAR;
+        putchar(c);
+        return state;
+    }
+    if (c=='"') {
+        state = INSTRING;
+        putchar(c);
+        return state;
+    }
+    if (c=='\\') {
+        int ch = getchar();
+        state = NORMAL;
+        if (ch=='n') {
+            printf("\n");
+            return state;
         }
         else {
-            if (c=='"') {
-                state = INSTRING;
-                putchar(c);
-            }
-            else {
-                if (c=='\\') {
-                    int ch = getchar();
-                    if (ch=='n') {
-                        printf("\n");
-                    }
-                    else {
-                        putchar(c);
-                        putchar(ch);
-                    }
-                }
-                else putchar(c);
-                state = NORMAL;
-            }
+            putchar(c);
+            putchar(ch);
+            return state;
         }
     }
+    putchar(c);
+    state = NORMAL;
     return state;
 }
 
@@ -57,7 +57,7 @@ handleCharState(int c) {
         putchar(c);
         return state;
     }
-    if (c=='\\' && getchar()=='n') {
+    if (c=='\\') {
         int ch = getchar();
         if (ch=='n') {
             printf("\n");
