@@ -14,9 +14,18 @@ handleNormalState(int c) {
         return state;
         }
         else {
-            state = NORMAL;
             putchar(c);
             putchar(ch);
+            if (ch=='\'') {
+                state = INCHAR;
+                return state;
+            }
+            if (ch=='"') {
+                state = INSTRING;
+                return state;
+            }
+            state = NORMAL;
+            return state;
         }
     }
     if (c=='\'') {
@@ -44,7 +53,16 @@ handleNormalState(int c) {
         }
         else {
             putchar(c);
-            handleNormalState(ch);
+            if (ch=='\'') {
+                state = INCHAR;
+                putchar(ch);
+                return state;
+            }
+            if (ch=='"') {
+                state = INSTRING;
+                putchar(ch);
+                return state;
+            }
             return state;
         }
     }
@@ -75,6 +93,7 @@ handleCharState(int c) {
     }
     if (c=='\\') {
         int ch = getchar();
+        if (ch==EOF) return NORMAL;
         if (ch=='n') {
             printf("\n");
         }
