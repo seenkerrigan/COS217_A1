@@ -39,6 +39,11 @@ handleNormalState(int c) {
         putchar(c);
         return state;
     }
+    if (c=='\n') {
+        printf("\n");
+        state = NORMAL;
+    }
+    /*
     if (c=='\\') {
         int ch = getchar();
         state = NORMAL;
@@ -67,9 +72,8 @@ handleNormalState(int c) {
                 return state;
             }
             return state;
-            */
         }
-    }
+        */
     putchar(c);
     state = NORMAL;
     return state;
