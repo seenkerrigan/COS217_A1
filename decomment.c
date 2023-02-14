@@ -3,6 +3,7 @@
 #include <ctype.h>
 
 enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING};
+int count = 1;
 
 enum Statetype
 handleNormalState(int c) {
@@ -20,8 +21,7 @@ handleNormalState(int c) {
         }
         else {
             putchar(c);
-            handleNormalState(ch);
-            return;
+            return handleNormalState(ch);
             /*
             putchar(ch);
             if (ch=='\'') {
@@ -47,6 +47,7 @@ handleNormalState(int c) {
         putchar(c);
         return state;
     }
+    if (c=='\n') count++;
     /*
     if (c=='\\') {
         int ch = getchar();
@@ -93,11 +94,13 @@ handleCommentState(int c) {
             return state;
         }
         else {
-            handleCommentState(ch);
-            return;
+            return handleCommentState(ch);
         }
     }
-    if (c=='\n') printf("\n");
+    if (c=='\n') {
+        count++;
+        printf("\n");
+    }
     state = INCOMMENT;
     return state;
 }
