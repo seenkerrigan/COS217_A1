@@ -127,7 +127,7 @@ int main(void) {
         }
     }
     if (state==INCOMMENT) {
-        stderr("unterminated comment");
+        fprintf(stderr, "Error: line BLANK: unterminated comment");
         return 1;
     }
     return 0;
