@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING};
@@ -74,8 +75,13 @@ handleNormalState(int c) {
 enum Statetype
 handleCommentState(int c) {
     enum Statetype state;
-    if (c=='*' && getchar()=='/') {
-        state = NORMAL;
+    if (c=='*') {
+        int ch = getchar();
+        if (ch=='/') {
+            state = NORMAL;
+            return state;
+        }
+        else state = INCOMMENT;
         return state;
     }
     if (c=='\n') printf("\n");
@@ -93,7 +99,10 @@ handleCharState(int c) {
     }
     if (c=='\\') {
         int ch = getchar();
-        if (ch==EOF) return NORMAL;
+        if (ch==EOF) {
+            putchar(c);
+            return NORMAL;
+        }
         if (ch=='n') {
             printf("\n");
         }
@@ -119,6 +128,10 @@ handleStringState(int c) {
     }
     if (c=='\\') {
         int ch = getchar();
+        if (ch==EOF) {
+            putchar(c);
+            return NORMAL;
+        }
         if (ch=='n') {
             printf("\n");
         }
@@ -155,7 +168,7 @@ int main(void) {
     }
     if (state==INCOMMENT) {
         fprintf(stderr, "Error: line BLANK: unterminated comment");
-        return 1;
+        return EXIT_FAILURE;
     }
     return 0;
 }
