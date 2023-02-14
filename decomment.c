@@ -31,6 +31,7 @@ handleNormalState(int c) {
                         putchar(ch);
                     }
                 }
+                else putchar(c);
                 state = NORMAL;
             }
         }
