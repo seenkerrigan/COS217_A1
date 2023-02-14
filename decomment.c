@@ -85,7 +85,6 @@ handleCommentState(int c) {
             return state;
         }
         else handleCommentState(ch);
-        return state;
     }
     if (c=='\n') printf("\n");
     state = INCOMMENT;
