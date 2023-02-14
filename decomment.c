@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <ctype.h>
 
-enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING};
+enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING, INBACKSLASH};
 
 enum Statetype
 handleNormalState(int c) {
     enum Statetype state;
     if (c=='/' && getchar()=='*') {
-        state = handleCommentState(c);
         state = INCOMMENT;
         putchar(' ');
     }
@@ -21,7 +20,19 @@ handleNormalState(int c) {
                 state = INSTRING;
                 putchar(c);
             }
-            else state = NORMAL;
+            else {
+                if (c=='\\') {
+                    int ch = getchar();
+                    if (ch=='n') {
+                        print("\n");
+                    }
+                    else {
+                        putchar(c);
+                        putchar(ch);
+                    }
+                }
+                state = NORMAL;
+            }
         }
     }
     return state;
@@ -43,6 +54,19 @@ handleCharState(int c) {
     if (c=='\'') {
         state = NORMAL;
         putchar(c);
+        return state;
+    }
+    if (c=='\\' && getchar()=='n') {
+        int ch = getchar();
+        if (ch=='n') {
+            printf("\n");
+        }
+        else {
+            putchar(c);
+            putchar(ch);
+        }
+        state = INCHAR;
+        return state;
     }
     state = INCHAR;
     putchar(c);
@@ -55,18 +79,32 @@ handleStringState(int c) {
     if (c=='"') {
         state = NORMAL;
         putchar(c);
+        return state;
+    }
+    if (c=='\\') {
+        int ch = getchar();
+        if (ch=='n') {
+            printf("\n");
+        }
+        else {
+            putchar(c);
+            putchar(ch);
+        }
+        state = INSTRING;
+        return state;
     }
     putchar(c);
     state = INSTRING; 
     return state;
 }
+
 int main(void) {
     int c;
     enum Statetype state = NORMAL;
     while ((c = getchar())!=EOF) {
         switch (state) {
             case NORMAL:
-                state = handNormalState(c);
+                state = handleNormalState(c);
                 break;
             case INCOMMENT:
                 state = handleCommentState(c);
