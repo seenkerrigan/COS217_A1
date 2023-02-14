@@ -98,7 +98,6 @@ handleCommentState(int c) {
         }
     }
     if (c=='\n') {
-        count++;
         printf("\n");
     }
     state = INCOMMENT;
@@ -120,6 +119,7 @@ handleCharState(int c) {
             return NORMAL;
         }
         if (ch=='n') {
+            count++;
             printf("\n");
         }
         else {
@@ -149,6 +149,7 @@ handleStringState(int c) {
             return NORMAL;
         }
         if (ch=='n') {
+            count++;
             printf("\n");
         }
         else {
@@ -183,7 +184,8 @@ int main(void) {
         }
     }
     if (state==INCOMMENT) {
-        fprintf(stderr, "Error: line BLANK: unterminated comment");
+        fprintf(stderr, "Error: line " + count);
+        fprintf(stderr, ": unterminated comment");
         return EXIT_FAILURE;
     }
     return 0;
