@@ -16,6 +16,8 @@ handleNormalState(int c) {
         }
         else {
             putchar(c);
+            handleNormalState(ch);
+            /*
             putchar(ch);
             if (ch=='\'') {
                 state = INCHAR;
@@ -27,6 +29,7 @@ handleNormalState(int c) {
             }
             state = NORMAL;
             return state;
+            */
         }
     }
     if (c=='\'') {
