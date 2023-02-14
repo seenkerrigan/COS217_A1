@@ -53,6 +53,8 @@ handleNormalState(int c) {
             return state;
         }
         else {
+            handleNormalState(ch);
+            /*
             putchar(c);
             if (ch=='\'') {
                 state = INCHAR;
@@ -65,6 +67,7 @@ handleNormalState(int c) {
                 return state;
             }
             return state;
+            */
         }
     }
     putchar(c);
@@ -81,7 +84,7 @@ handleCommentState(int c) {
             state = NORMAL;
             return state;
         }
-        else state = INCOMMENT;
+        else handleCommentState(ch);
         return state;
     }
     if (c=='\n') printf("\n");
