@@ -135,6 +135,7 @@ handleCharState(int c) {
             state = INSTRING;
             return state;
         }
+        putchar(c);
         return handleCharState(ch);
     }
     /*
@@ -186,6 +187,7 @@ handleStringState(int c) {
             state = INSTRING;
             return state;
         }
+        putchar(c);
         return handleStringState(ch);
     }
     /*
