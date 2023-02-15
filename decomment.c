@@ -184,8 +184,8 @@ int main(void) {
         }
     }
     if (state==INCOMMENT) {
-        fprintf(stderr, "Error: line " + count);
-        fprintf(stderr, ": unterminated comment");
+
+        fprintf(stderr, "Error: line %d: unterminated comment", count);
         return EXIT_FAILURE;
     }
     return 0;
