@@ -135,7 +135,7 @@ handleCharState(int c) {
             state = INSTRING;
             return state;
         }
-        return handleStringState(ch);
+        return handleCharState(ch);
     }
     /*
     if (c=='\\') {
