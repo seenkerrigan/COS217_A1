@@ -90,6 +90,9 @@ handleCommentState(int c) {
     enum Statetype state;
     if (c=='*') {
         int ch = getchar();
+        if (ch==EOF) {
+            return INCOMMENT;
+        }
         if (ch=='/') {
             state = NORMAL;
             return state;
@@ -119,6 +122,20 @@ handleCharState(int c) {
         printf("\n");
         state = INCHAR;
         return state;
+    }
+    if (c=='\\') {
+        int ch = getchar();
+        if (ch==EOF) {
+            putchar(c);
+            return NORMAL;
+        }
+        if (ch=='\'') {
+            putchar(c);
+            putchar(ch);
+            state = INSTRING;
+            return state;
+        }
+        return handleStringState(ch);
     }
     /*
     if (c=='\\') {
@@ -156,6 +173,20 @@ handleStringState(int c) {
         printf("\n");
         state = INSTRING;
         return state;
+    }
+    if (c=='\\') {
+        int ch = getchar();
+        if (ch==EOF) {
+            putchar(c);
+            return NORMAL;
+        }
+        if (ch=='"') {
+            putchar(c);
+            putchar(ch);
+            state = INSTRING;
+            return state;
+        }
+        return handleStringState(ch);
     }
     /*
     if (c=='\\') {
