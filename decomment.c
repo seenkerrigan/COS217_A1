@@ -2,10 +2,16 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+/* names of DFA states */
 enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING};
+/* int to keep track of what line a comment starts on */
 int count = 1;
+/* int to keep track of lines in a comment*/
 int countComment = 0;
 
+/* Normal DFA state. Takes a char as an int c and checks if a String,
+char, or comment begins. Prints char c and returns state DFA is in 
+after char c is read. */
 enum Statetype
 handleNormalState(int c) {
     enum Statetype state;
@@ -23,19 +29,6 @@ handleNormalState(int c) {
         else {
             putchar(c);
             return handleNormalState(ch);
-            /*
-            putchar(ch);
-            if (ch=='\'') {
-                state = INCHAR;
-                return state;
-            }
-            if (ch=='"') {
-                state = INSTRING;
-                return state;
-            }
-            state = NORMAL;
-            return state;
-            */
         }
     }
     if (c=='\'') {
@@ -49,42 +42,14 @@ handleNormalState(int c) {
         return state;
     }
     if (c=='\n') count++;
-    /*
-    if (c=='\\') {
-        int ch = getchar();
-        state = NORMAL;
-        if (ch=='n') {
-            int char3 = getchar();
-            if (char3==' ') printf("\n");
-            else {
-                putchar(c);
-                putchar(ch);
-                handleNormalState(char3);
-            }
-            return state;
-        }
-        else {
-            handleNormalState(ch);
-            putchar(c);
-            if (ch=='\'') {
-                state = INCHAR;
-                putchar(ch);
-                return state;
-            }
-            if (ch=='"') {
-                state = INSTRING;
-                putchar(ch);
-                return state;
-            }
-            return state;
-        }
-    }
-    */
     putchar(c);
     state = NORMAL;
     return state;
 }
 
+/* represents DFA state of being inside a comment. Takes char input c
+as an int and checks to see if char c causes comment to end. Returns
+next state of DFA. */
 enum Statetype
 handleCommentState(int c) {
     enum Statetype state;
@@ -111,6 +76,9 @@ handleCommentState(int c) {
     return state;
 }
 
+/* Represents DFA state of being in a char. Takes char input c as an int
+and checks to see if c ends the char. Prints out c and returns next
+state of DFA. */
 enum Statetype
 handleCharState(int c) {
     enum Statetype state;
@@ -125,6 +93,7 @@ handleCharState(int c) {
         state = INCHAR;
         return state;
     }
+    /* Checking for backslash removing affect of ' or \ characters */
     if (c=='\\') {
         int ch = getchar();
         if (ch==EOF) {
@@ -146,29 +115,14 @@ handleCharState(int c) {
         putchar(c);
         return handleCharState(ch);
     }
-    /*
-    if (c=='\\') {
-        int ch = getchar();
-        if (ch==EOF) {
-            putchar(c);
-            return NORMAL;
-        }
-        if (ch=='n') {
-            printf("\n");
-        }
-        else {
-            putchar(c);
-            putchar(ch);
-        }
-        state = INCHAR;
-        return state;
-    }
-    */
     state = INCHAR;
     putchar(c);
     return state;
 }
 
+/* Represents DFA state of being in a String. Takes char input c as an
+int and checks if c ends the String. Prints c and returns next DFA
+state. */
 enum Statetype
 handleStringState(int c) {
     enum Statetype state;
@@ -183,6 +137,7 @@ handleStringState(int c) {
         state = INSTRING;
         return state;
     }
+    /* Checking for backslash removing affect of " or \ characters */
     if (c=='\\') {
         int ch = getchar();
         if (ch==EOF) {
@@ -204,30 +159,16 @@ handleStringState(int c) {
         putchar(c);
         return handleStringState(ch);
     }
-    /*
-    if (c=='\\') {
-        int ch = getchar();
-        if (ch==EOF) {
-            putchar(c);
-            return NORMAL;
-        }
-        if (ch=='n') {
-            count++;
-            printf("\n");
-        }
-        else {
-            putchar(c);
-            putchar(ch);
-        }
-        state = INSTRING;
-        return state;
-    }
-    */
     putchar(c);
     state = INSTRING; 
     return state;
 }
 
+/* Starts DFA at Normal state and reads in chars as an int c until
+end of file is reached. Calls methods representing DFA states as
+necessary. When end of file is reached, checks if file has an
+unterminated comment and prints to stderr if this is the case with
+the line number of the unterminated comment. */
 int main(void) {
     int c;
     enum Statetype state = NORMAL;
