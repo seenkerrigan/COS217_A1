@@ -1,0 +1,17 @@
+NORMAL (accept) <-- the start state
+'"': STRING
+'\'': CHAR
+"/*": COMMENT
+other: NORMAL
+
+STRING (accept)
+'"': NORMAL
+other: STRING
+
+CHAR (accept)
+'\'': NORMAL
+other: CHAR
+
+COMMENT (reject)
+"*/": NORMAL
+other: COMMENT
