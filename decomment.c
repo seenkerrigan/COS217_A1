@@ -4,6 +4,7 @@
 
 enum Statetype {NORMAL, INCOMMENT, INCHAR, INSTRING};
 int count = 1;
+int countComment = 0;
 
 enum Statetype
 handleNormalState(int c) {
@@ -98,6 +99,7 @@ handleCommentState(int c) {
         }
     }
     if (c=='\n') {
+        countComment++;
         printf("\n");
     }
     state = INCOMMENT;
@@ -112,6 +114,13 @@ handleCharState(int c) {
         putchar(c);
         return state;
     }
+    if (c=='\n') {
+        count++;
+        printf("\n");
+        state = INCHAR;
+        return state;
+    }
+    /*
     if (c=='\\') {
         int ch = getchar();
         if (ch==EOF) {
@@ -119,7 +128,6 @@ handleCharState(int c) {
             return NORMAL;
         }
         if (ch=='n') {
-            count++;
             printf("\n");
         }
         else {
@@ -129,6 +137,7 @@ handleCharState(int c) {
         state = INCHAR;
         return state;
     }
+    */
     state = INCHAR;
     putchar(c);
     return state;
@@ -142,6 +151,13 @@ handleStringState(int c) {
         putchar(c);
         return state;
     }
+    if (c=='\n') {
+        count++;
+        printf("\n");
+        state = INSTRING;
+        return state;
+    }
+    /*
     if (c=='\\') {
         int ch = getchar();
         if (ch==EOF) {
@@ -159,6 +175,7 @@ handleStringState(int c) {
         state = INSTRING;
         return state;
     }
+    */
     putchar(c);
     state = INSTRING; 
     return state;
