@@ -94,6 +94,8 @@ handleCommentState(int c) {
             return INCOMMENT;
         }
         if (ch=='/') {
+            count += countComment;
+            countComment = 0;
             state = NORMAL;
             return state;
         }
