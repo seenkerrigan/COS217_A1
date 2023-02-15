@@ -132,7 +132,13 @@ handleCharState(int c) {
         if (ch=='\'') {
             putchar(c);
             putchar(ch);
-            state = INSTRING;
+            state = INCHAR;
+            return state;
+        }
+        if (ch=='\\') {
+            putchar(c);
+            putchar(ch);
+            state = INCHAR;
             return state;
         }
         putchar(c);
@@ -182,6 +188,12 @@ handleStringState(int c) {
             return NORMAL;
         }
         if (ch=='"') {
+            putchar(c);
+            putchar(ch);
+            state = INSTRING;
+            return state;
+        }
+        if (ch=='\\') {
             putchar(c);
             putchar(ch);
             state = INSTRING;
